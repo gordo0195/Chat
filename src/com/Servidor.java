@@ -4,13 +4,14 @@
  * and open the template in the editor.
  */
 package com;
-import com.Interface.ChatWin;
-import com.Interface.StartWin;
+import com.Interface.ChatServer;
+import com.Interface.ChatClient;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,34 +20,48 @@ import java.util.logging.Logger;
  *
  * @author Marco
  */
-public class Servidor {
+public class Servidor extends Observable implements Runnable {
+    
+    private int puerto;
+            
+         
+    
+    public Servidor(int puerto){
+    
+        this.puerto = puerto;
+    }
     
     public static void main(String[] args){
-        ServerSocket server = null;
-        Socket client = null;
+       
+    }
+    @Override
+    public void run() {
+        ServerSocket Server = null;
+        Socket Client = null;
+        
         DataInputStream in;
         DataOutputStream out;
 
-        final int PORT = 5000;
-
-        try{
-            server = new ServerSocket(PORT);
+       try{
+            Server = new ServerSocket(puerto);
             System.out.println("Servidor iniciado");
 
             while (true) {
 
-                client = server.accept();
+                Client = Server.accept();
 
                 System.out.println("Cliente Conectado!");
 
-                in = new DataInputStream(client.getInputStream());
-                out = new DataOutputStream(client.getOutputStream());
+                in = new DataInputStream(Client.getInputStream());
+                //out = new DataOutputStream(Client.getOutputStream());
                 
-                String mensaje = in.readUTF();
-
-                System.out.println(mensaje);
-                out.writeUTF("Hola Mundo desde el Servidor");
-                client.close();
+                String Message = in.readUTF();
+                
+                this.setChanged();
+                this.notifyObservers(Message);
+                this.clearChanged();
+                
+                Client.close();
                 System.out.println("Cliente Desconectado!");
 
             }
@@ -56,5 +71,6 @@ public class Servidor {
         }
 
         }
+    }
     
-}
+

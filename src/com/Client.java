@@ -9,8 +9,8 @@ package com;
  *
  * @author Marco
  */
-import com.Interface.ChatWin;
-import com.Interface.StartWin;
+import com.Interface.ChatServer;
+import com.Interface.ChatClient;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -18,33 +18,44 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-public class Client {
+public class Client implements Runnable{
     
+    private int port;
+    private String message;
     
-    private static final Class<Client> CLASS = Client.class;
+    public Client(int port, String message){
+        
+        this.port = port;
+        this.message = message;
+    }
 
-    public static void main(String[] Args) {
-
-        final String HOST = "127.0.0.1";
-        final int PORT = 5000;
-        DataInputStream in;
+    @Override
+    public void run() {
+        
+       final String HOST = "127.0.0.1";
+      
+        //DataInputStream in;
         DataOutputStream out;
         try {
-            Socket client = new Socket(HOST, PORT);
+            Socket client = new Socket(HOST, port);
 
-            in = new DataInputStream(client.getInputStream());
+           // in = new DataInputStream(client.getInputStream());
             out = new DataOutputStream(client.getOutputStream());
 
-            out.writeUTF("Hola mundo desde el cliente");
-            String mensaje = in.readUTF();
-            System.out.println(mensaje);
+            out.writeUTF(message);
+           
 
             client.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(CLASS.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
 
         }
 
+    }
+    
+    public static void main(String[] Args) {
+
+    
     }
 }

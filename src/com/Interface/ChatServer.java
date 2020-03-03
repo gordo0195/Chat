@@ -6,18 +6,33 @@
 package com.Interface;
 import com.Client;
 import com.Servidor;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Marco
  */
-public class ChatWin extends javax.swing.JFrame {
+public class ChatServer extends javax.swing.JFrame implements Observer {
 
     /**
      * Creates new form ChatWin
      */
-    public ChatWin() {
+    public ChatServer() {
         initComponents();
+        this.getRootPane().setDefaultButton(this.BtnSend);
+        
+        Servidor LocalServer = new Servidor(6000);
+        LocalServer.addObserver(this);
+        Thread Flow1 = new Thread(LocalServer);
+        Flow1.start();
     }
 
     /**
@@ -30,32 +45,20 @@ public class ChatWin extends javax.swing.JFrame {
     private void initComponents() {
 
         CanvaChat = new javax.swing.JPanel();
-        CanvaMsj = new javax.swing.JPanel();
-        TxtMensagge = new javax.swing.JTextField();
+        TxtMenssage = new javax.swing.JTextField();
         BtnSend = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TxtChat = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        CanvaChat.setBackground(new java.awt.Color(255, 0, 255));
-        CanvaChat.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos I 2020", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(255, 255, 153))); // NOI18N
+        CanvaChat.setBackground(new java.awt.Color(204, 102, 255));
+        CanvaChat.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos I 2020 Server", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(255, 255, 153))); // NOI18N
 
-        CanvaMsj.setBackground(new java.awt.Color(255, 255, 153));
-
-        javax.swing.GroupLayout CanvaMsjLayout = new javax.swing.GroupLayout(CanvaMsj);
-        CanvaMsj.setLayout(CanvaMsjLayout);
-        CanvaMsjLayout.setHorizontalGroup(
-            CanvaMsjLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        CanvaMsjLayout.setVerticalGroup(
-            CanvaMsjLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 216, Short.MAX_VALUE)
-        );
-
-        TxtMensagge.setBackground(new java.awt.Color(255, 255, 153));
-        TxtMensagge.setFont(new java.awt.Font("Snap ITC", 0, 12)); // NOI18N
-        TxtMensagge.setForeground(new java.awt.Color(255, 51, 255));
-        TxtMensagge.setText("Type your menssage...");
+        TxtMenssage.setBackground(new java.awt.Color(255, 255, 153));
+        TxtMenssage.setFont(new java.awt.Font("Snap ITC", 0, 12)); // NOI18N
+        TxtMenssage.setForeground(new java.awt.Color(204, 102, 255));
+        TxtMenssage.setText("Type your menssage...");
 
         BtnSend.setBackground(new java.awt.Color(255, 0, 255));
         BtnSend.setFont(new java.awt.Font("Sitka Text", 1, 24)); // NOI18N
@@ -68,6 +71,11 @@ public class ChatWin extends javax.swing.JFrame {
             }
         });
 
+        TxtChat.setBackground(new java.awt.Color(255, 255, 153));
+        TxtChat.setColumns(20);
+        TxtChat.setRows(5);
+        jScrollPane1.setViewportView(TxtChat);
+
         javax.swing.GroupLayout CanvaChatLayout = new javax.swing.GroupLayout(CanvaChat);
         CanvaChat.setLayout(CanvaChatLayout);
         CanvaChatLayout.setHorizontalGroup(
@@ -75,9 +83,9 @@ public class ChatWin extends javax.swing.JFrame {
             .addGroup(CanvaChatLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(CanvaChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(CanvaMsj, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(CanvaChatLayout.createSequentialGroup()
-                        .addComponent(TxtMensagge, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(TxtMenssage, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(BtnSend, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -85,10 +93,11 @@ public class ChatWin extends javax.swing.JFrame {
         CanvaChatLayout.setVerticalGroup(
             CanvaChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(CanvaChatLayout.createSequentialGroup()
-                .addComponent(CanvaMsj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(CanvaChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TxtMensagge)
+                    .addComponent(TxtMenssage)
                     .addComponent(BtnSend, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -109,8 +118,14 @@ public class ChatWin extends javax.swing.JFrame {
 
     private void BtnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSendActionPerformed
         
-        Servidor Server = new Servidor();
-        Client clientt = new Client();
+        String message = "Server: " + this.TxtMenssage.getText() + "\n";
+        this.TxtChat.append(message);
+        
+        Client LocalClient = new Client(5000, message);
+        
+        Thread Flow2 = new Thread(LocalClient);
+        Flow2.start();
+        
     }//GEN-LAST:event_BtnSendActionPerformed
 
     /**
@@ -130,20 +145,21 @@ public class ChatWin extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ChatWin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ChatServer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ChatWin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ChatServer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ChatWin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ChatServer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ChatWin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ChatServer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ChatWin().setVisible(true);
+                new ChatServer().setVisible(true);
             }
         });
     }
@@ -151,7 +167,15 @@ public class ChatWin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnSend;
     private javax.swing.JPanel CanvaChat;
-    private javax.swing.JPanel CanvaMsj;
-    private javax.swing.JTextField TxtMensagge;
+    private javax.swing.JTextArea TxtChat;
+    private javax.swing.JTextField TxtMenssage;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object arg) {
+        
+        this.TxtChat.append((String) arg);
+        
+    }
 }
