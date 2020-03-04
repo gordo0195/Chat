@@ -14,7 +14,7 @@ import java.util.Observer;
  *
  * @author Marco
  */
-public class ChatClient extends javax.swing.JFrame implements Observer {
+public class ChatClient extends javax.swing.JFrame implements Observer {// aqui se implementa el concepto de clase
 
     /**
      * Creates new form VentanaInicio
@@ -166,7 +166,8 @@ public class ChatClient extends javax.swing.JFrame implements Observer {
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg) { //Este metodo evidencia abstraccion al ser un método abstracto de la 
+                                                    //clase Observer, tabien evidencia el overriding
        
         this.TextChat.append((String) arg);
     }

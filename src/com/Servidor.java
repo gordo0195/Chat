@@ -22,11 +22,11 @@ import java.util.logging.Logger;
  */
 public class Servidor extends Observable implements Runnable {
     
-    private int puerto;
+    private int puerto; // aqui se evidencia la encapsulacion
             
          
     
-    public Servidor(int puerto){
+    public Servidor(int puerto){//Aqui estan presentes el método y el atributo
     
         this.puerto = puerto;
     }

@@ -19,8 +19,9 @@ import java.util.logging.Logger;
 /**
  *
  * @author Marco
+ * la modularidad se da en la creacion de paquetes que se alojan dentro de distintos módulos
  */
-public class ChatServer extends javax.swing.JFrame implements Observer {
+public class ChatServer extends javax.swing.JFrame implements Observer {// aqui se evidencia la herencia de la clase swing
 
     /**
      * Creates new form ChatWin
@@ -29,7 +30,7 @@ public class ChatServer extends javax.swing.JFrame implements Observer {
         initComponents();
         this.getRootPane().setDefaultButton(this.BtnSend);
         
-        Servidor LocalServer = new Servidor(6000);
+        Servidor LocalServer = new Servidor(6000);// Aqui se evidencia la instanciación
         LocalServer.addObserver(this);
         Thread Flow1 = new Thread(LocalServer);
         Flow1.start();
